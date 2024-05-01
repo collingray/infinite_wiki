@@ -1,0 +1,282 @@
+/* Reset basic elements to ensure consistency */
+body, h1, h2, p, img, div {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+
+/* Body and overall page styling */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+
+/* Headings styling */
+h1, h2, h3 {
+    color: #000;
+    margin: 0.25em 0 0.25em 0;
+}
+
+h1, h2 {
+    margin-top: 0.8em;
+    margin-bottom: 0.5em;
+    font-family: "Linux Libertine", Georgia, Times, "Source Serif Pro", serif;
+    font-weight: normal;
+}
+
+h1, h2, h4 {
+    border-bottom: 1px solid #a2a9b1;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 28.8px;
+}
+
+h2 {
+    font-size: 21px;
+    padding-top: 0.5em;
+    padding-bottom: 0.17em;
+}
+
+h3 {
+    font-family: sans-serif;
+    font-size: 16.8px;
+    font-weight: bold;
+    padding-top: 0.35em;
+}
+
+/* Paragraph styling */
+/*p {*/
+/*    color: #666;*/
+/*}*/
+
+p {
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 0.5em;
+    color: #202122;
+}
+
+th, td {
+    padding: 0;
+    border: none;
+}
+
+
+/* Container for content and sidebar */
+.container {
+    display: grid;
+    column-gap: 24px;
+    grid-template-columns: 12.25rem minmax(0, 1fr);
+    grid-template-areas: "sidebar main";
+    max-width: 1596px;
+    min-width: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 2em 2.75em;
+
+}
+
+/* Main content area */
+.main-text {
+    /*flex-grow: 1;*/
+    padding-right: 20px;
+}
+
+/* Sidebar styling */
+.info-card {
+    width: 22em;
+    background-color: #F8F9FA;
+    float: right;
+    clear: right;
+    margin: 0.5em 0 0.5em 1em;
+    border: 1px solid #A2A9B1;
+    border-collapse: separate;
+    text-indent: initial;
+    font-size: 88%;
+}
+
+.info-card-image > div > img {
+    width: 85%;
+    border: 1px solid #ddd;
+    padding: 0;
+}
+
+.info-card-image > div {
+    justify-content: center;
+    display: flex;
+}
+
+.info-card-image {
+    text-align: center;
+}
+
+.info-card-title {
+    font-weight: bold;
+    text-align: center;
+    padding: 0;
+}
+
+
+th, td {
+    text-align: left;
+    vertical-align: top;
+}
+
+table {
+    padding: 0.25em;
+}
+
+/* Link styling */
+a {
+    color: #3366CC;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Navigation sidebar styling */
+.table-of-contents {
+    position: sticky;
+    top: 2em;
+    margin-top: 5em;
+    line-height: 1em;
+}
+
+.table-of-contents h4 {
+    margin: 0 0 0 1em;
+    padding-bottom: 0.5em;
+    border-color: #EAECF0;
+}
+
+.table-of-contents ul {
+    list-style-type: none;
+    padding-left: 1em;
+    padding-top: 0.8em;
+}
+
+.table-of-contents a.active {
+    font-weight: bold;
+    color: #000;
+}
+
+.table-of-contents > ul {
+    padding-top: 0.5em;
+    margin: 0;
+}
+
+.table-of-contents li {
+    padding: 0.4em;
+}
+
+/* Main content adjustment for navigation */
+.main-content {
+    max-width: 1100px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-button {
+    color: black;
+    display: inline-block;
+    border: none;
+    background: none;
+    left: -15px;
+    top: 6px;
+    position: absolute;
+    transition-duration: 100ms;
+    padding: 0;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+}
+
+.dropdown-button-src {
+    background-image: url("https://en.wikipedia.org/w/load.php?modules=skins.vector.icons&image=expand");
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 12px;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+}
+
+.dropdown.collapsed > .dropdown-button {
+    transform: rotate(-90deg);
+}
+
+.dropdown.collapsed > ul {
+    display: none;
+}
+
+.search-bar {
+    border: 1px solid #a2a9b1;
+    margin: 1px;
+    border-radius: 2px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.search-bar:has(> input:focus) {
+    border: 2px solid #1a73e8;
+    margin: 0;
+}
+
+.search-box {
+    padding: 8px;
+    border: none;
+    width: 80%;
+    margin-left: 30px;
+    font-size: 16px;
+}
+
+.search-box:focus {
+    outline: none;
+}
+
+.search-magnifying-glass {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 7px;
+    left: 8px;
+}
+
+.search-container {
+    position: relative;
+    max-width: 400px;
+}
+
+.search-suggestions {
+    position: absolute;
+    width: 100%;
+    max-height: 300px;
+    margin: 0;
+    background-color: white;
+    border: 1px solid #a2a9b1;
+    border-top: none;
+    display: none;
+    list-style-type: none;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.search-suggestions.suggesting {
+    display: block;
+}
+
+.search-suggestions > li {
+    padding: 8px;
+    border-bottom: 1px solid #a2a9b1;
+    overflow: clip;
+}
+
