@@ -15,8 +15,11 @@ export function index_template(data) {
 <body>
 <div class="container">
     <div>
-        <img src="https://en.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-en.svg" alt="image"
-             width="100px">
+        <img src="./logo.png" alt="logo" width="80px">
+        <div class="logo-text">
+            <img src="./logo_title.png" alt="infinipedia" width="135px">
+            <img src="./logo_subtitle.png" alt="the endless encyclopedia" width="135px">
+        </div>
     </div>
     <div>
         <div id="search" class="search-container">
