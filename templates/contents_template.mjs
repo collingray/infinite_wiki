@@ -1,3 +1,5 @@
+import {name_to_id} from "./utils.mjs";
+
 export function contents_template(content) {
   const keys = Object.keys(content);
 
@@ -8,8 +10,7 @@ export function contents_template(content) {
 
     // Skip the summary, it doesn't have a header
     if (key !== "summary") {
-      // The title is the key with underscores replaced with spaces
-      let title = key.replace(/_/g, " ");
+      let id = name_to_id(key);
 
       // If the content is an object, it's contains subsections and should be a dropdown
       if (content[key].constructor === Object) {
@@ -17,14 +18,14 @@ export function contents_template(content) {
     <button class="dropdown-button">
         <span class="dropdown-button-src"></span>
     </button>
-    <a href="#${key}">${title}</a>
+    <a href="#${id}">${key}</a>
     <ul>
         ${contents_template(content[key])}
     </ul>
 </li>
 `
       } else {
-        out += `<li><a href="#${key}">${title}</a></li>`
+        out += `<li><a href="#${id}">${key}</a></li>`
       }
     }
   }

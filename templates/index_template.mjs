@@ -9,8 +9,8 @@ export function index_template(data) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${data.title}</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/script.js" defer></script>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>

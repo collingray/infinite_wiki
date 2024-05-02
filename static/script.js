@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-
   const sections = document.querySelectorAll('h2, h3');
   const navLinks = document.querySelectorAll('nav ul li a');
 
