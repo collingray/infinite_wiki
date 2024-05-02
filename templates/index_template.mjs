@@ -11,15 +11,15 @@ export function index_template(data) {
     <title>${data.title}</title>
     <link rel="stylesheet" href="static/style.css">
     <script src="static/script.js" defer></script>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="static/assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <div class="container">
     <div>
-        <img src="./logo.png" alt="logo" width="80px">
+        <img src="static/assets/logo.png" alt="logo" width="80px">
         <div class="logo-text">
-            <img src="./logo_title.png" alt="infinipedia" width="135px">
-            <img src="./logo_subtitle.png" alt="the endless encyclopedia" width="135px">
+            <img src="static/assets/logo_title.png" alt="infinipedia" width="135px">
+            <img src="static/assets/logo_subtitle.png" alt="the endless encyclopedia" width="135px">
         </div>
     </div>
     <div>
