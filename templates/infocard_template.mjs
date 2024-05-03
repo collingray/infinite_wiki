@@ -30,8 +30,8 @@ export function infocard_template(card) {
     </tr>
     <tr>
       <td class="info-card-image" colspan="2">
-        <div>
-          <img src="${card.image}" alt="${card.caption}"/>
+        <div class="loading-background">
+          <img src="${card.image}" alt="${card.caption}" width="220px" height="294px"/>
         </div>
         <label>${card.caption}</label>
       </td>

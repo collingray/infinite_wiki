@@ -263,3 +263,7 @@ a:hover {
     overflow: clip;
 }
 
+.loading-background {
+    background: url('/static/assets/loading_spinner.gif') center / cover no-repeat;
+    background-size: 5%;
+}
