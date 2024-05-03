@@ -7,6 +7,7 @@ from utils import generate_file
 
 app = Flask(__name__)
 DATABASE_PATH = 'file_database.db'
+N_GENERATION_RETRIES = 3
 
 
 def get_db_connection():
@@ -37,7 +38,8 @@ def serve_random_file():
     file = conn.execute("SELECT * FROM files ORDER BY RANDOM() LIMIT 1;").fetchone()
     conn.close()
     if file:
-        return redirect(url_for('serve_file', filename=file['filename']))
+        filename = file['filename'].replace(' ', '_')
+        return redirect(url_for('serve_file', filename=filename))
     else:
         return 'No files available', 404
 
@@ -50,11 +52,20 @@ def serve_file(filename):
     file = conn.execute("SELECT * FROM files WHERE filename = ?", (filename,)).fetchone()
     conn.close()
     if file:
-        print("File found in database")
         return render_template_string(file['content'])
     else:
-        print("File not found in database")
-        content = generate_file(filename)  # Generate file dynamically
+        retries = 0
+
+        while retries <= N_GENERATION_RETRIES:
+            try:
+                content = generate_file(filename)
+                break
+            except Exception as e:
+                if retries >= N_GENERATION_RETRIES:
+                    return "Internal server error. Please try again later.", 500
+
+                retries += 1
+
         conn = get_db_connection()
         conn.execute("INSERT INTO files (filename, content) VALUES (?, ?)", (filename, content))
         conn.commit()
