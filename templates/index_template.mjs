@@ -16,11 +16,13 @@ export function index_template(data) {
 <body>
 <div class="container">
     <div>
-        <img src="/static/assets/logo.png" alt="logo" width="80px">
-        <div class="logo-text">
-            <img src="/static/assets/logo_title.png" alt="infinipedia" width="135px">
-            <img src="/static/assets/logo_subtitle.png" alt="the endless encyclopedia" width="135px">
-        </div>
+        <a href="/">
+          <img src="/static/assets/logo.png" alt="logo" width="80px">
+          <div class="logo-text">
+              <img src="/static/assets/logo_title.png" alt="infinipedia" width="135px">
+              <img src="/static/assets/logo_subtitle.png" alt="the endless encyclopedia" width="135px">
+          </div>
+        </a>
     </div>
     <div>
         <div id="search" class="search-container">
