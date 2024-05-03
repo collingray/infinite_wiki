@@ -26,6 +26,8 @@ Make up facts as you go along, don't include boring information, and be VERY cre
 
 Don't constrain yourself to reality, make things up.
 
+If the user gives you a title that is illegible, then interpret it as an acronym and make up what it stands for.
+
 Remember to include an image in the card, and make sure the image is relevant to the article.
 
 Put in many <a> tags around any notable people, places, ideas, books, movies, things, or anything else that should have its own article.
@@ -155,14 +157,8 @@ def generate_yaml(filename: str) -> str:
 
 def generate_image(prompt: str) -> str:
     url = f"{image_endpoint}?prompt={prompt}"
-    filename = f'static/images/{hash(prompt)}.jpg'
 
-    response = requests.get(url)
-
-    with open(filename, 'wb') as f:
-        f.write(response.content)
-
-    return filename
+    return requests.get(url).json()['path']
 
 
 def generate_file(filename: str) -> str:
@@ -171,11 +167,19 @@ def generate_file(filename: str) -> str:
 
     if not os.path.exists(html_filename):
         if not os.path.exists(yaml_filename):
-            yaml_text = generate_yaml(filename)
-            print(yaml_text)
-            yaml_obj = yaml.safe_load(yaml_text)
-            yaml_obj['card']['image'] = "/" + generate_image(yaml_obj['card']['caption'])
-            yaml_text = yaml.dump(yaml_obj, sort_keys=False)
+            try:
+                yaml_text = generate_yaml(filename)
+                yaml_obj = yaml.safe_load(yaml_text)
+                yaml_obj['card']['image'] = "/" + generate_image(yaml_obj['card']['caption'])
+                yaml_text = yaml.dump(yaml_obj, sort_keys=False)
+            except Exception as e:
+                with open(f'./data/errors/{filename}.yaml', 'w') as f:
+                    f.write(yaml_text)
+
+                with open(f'./data/errors/{filename}.err', 'w') as f:
+                    f.write(str(e))
+
+                raise e
 
             # save to disk
             with open(yaml_filename, 'w') as f:

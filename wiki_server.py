@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template_string, send_from_directory, redirect, url_for
 import sqlite3
 import os
+import time
 
 from utils import generate_file
 
@@ -59,6 +60,23 @@ def serve_file(filename):
         conn.commit()
         conn.close()
         return render_template_string(content)
+
+
+@app.route('/static/images/<path:filename>')
+def serve_loading_image(filename):
+    """We generate these images async, so we need to wait until the file becomes available"""
+    timeout = 10000
+    interval = 250
+
+    path = f'static/images/{filename}'
+    while not os.path.exists(path) and timeout > 0:
+        time.sleep(min(interval, timeout) / 1000)
+        timeout -= interval
+
+    if os.path.exists(path):
+        return send_from_directory('static/images', filename)
+    else:
+        return 'Image not found', 404
 
 
 @app.route('/static/<path:filename>')

@@ -1,7 +1,8 @@
+import threading
+
 import torch
-from diffusers import AutoPipelineForText2Image, StableCascadeCombinedPipeline
-from flask import Flask, request, jsonify, send_file
-from io import BytesIO
+from diffusers import StableCascadeCombinedPipeline
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -11,25 +12,7 @@ pipe.to("cuda")
 pipe.prior_image_encoder.to("cuda")
 
 
-def send_image(image):
-    img_io = BytesIO()
-    image.save(img_io, 'JPEG', quality=70)
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/jpeg')
-
-
-@app.route('/generate')
-def generate():
-    """
-    Generate and return a new image, using the provided prompt
-    """
-    prompt = request.args.get('prompt')
-    print(prompt)
-    if not prompt:
-        return jsonify({'error': 'Missing prompt parameter'}), 400
-
-    # Generate the image here
-    # image = pipe(prompt=prompt, num_inference_steps=1, guidance_scale=0.0).images[0]
+def generate_save_image(path, prompt):
     image = pipe(
         prompt=prompt,
         negative_prompt="",
@@ -40,8 +23,27 @@ def generate():
         height=1024,
     ).images[0]
 
+    image.save(path)
+
+
+@app.route('/generate')
+def generate():
+    """
+    Generate an image from the prompt, store it in static/images, and return the image path.
+
+    The image path is returned immediately, but the image is generated in the background.
+    """
+    prompt = request.args.get('prompt')
+    if not prompt:
+        return jsonify({'error': 'Missing prompt parameter'}), 400
+
+    path = f'static/images/{abs(hash(prompt))}.jpg'
+
+    # Generate and save the image in the background
+    threading.Thread(target=generate_save_image, args=(path, prompt)).start()
+
     # Return the image
-    return send_image(image)
+    return jsonify({'path': path})
 
 
 if __name__ == '__main__':
