@@ -44,6 +44,7 @@ def serve_random_file():
 @app.route('/wiki/<filename>')
 def serve_file(filename):
     """Serve an existing file or generate a missing file."""
+    filename = filename.replace('_', ' ')
     conn = get_db_connection()
     file = conn.execute("SELECT * FROM files WHERE filename = ?", (filename,)).fetchone()
     conn.close()
@@ -64,6 +65,15 @@ def serve_file(filename):
 def static_files(filename):
     """Serve static files like CSS and JS."""
     return send_from_directory('static', filename)
+
+
+@app.route('/api/fetch_titles')
+def fetch_titles():
+    """Fetch all titles from the database."""
+    conn = get_db_connection()
+    titles = conn.execute("SELECT filename FROM files;").fetchall()
+    conn.close()
+    return jsonify([title['filename'] for title in titles])
 
 
 if __name__ == '__main__':

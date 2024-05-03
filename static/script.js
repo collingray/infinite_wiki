@@ -8,7 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  const data = ["Apple", "Avocado", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew"];
+  let data = [];
+
+  fetch('/api/fetch_titles').then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  }).then(json => {
+    data = json;
+  })
 
   let search = document.getElementById('search');
   let search_box = search
@@ -27,9 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
         let li = document.createElement('li');
         li.textContent = item;
         li.onclick = function () {
-          search_box.value = item;
-          search_suggestions.innerHTML = '';
+          // on click, redirect to the page
+          window.location.href = `/wiki/${item.replace(/\s+/g, '_')}`;
         };
+        li.style.cursor = 'pointer';
         search_suggestions.appendChild(li);
       });
 
@@ -42,6 +52,15 @@ document.addEventListener('DOMContentLoaded', function () {
       search_suggestions.classList.add("suggesting");
     } else {
       search_suggestions.classList.remove("suggesting");
+    }
+  });
+
+  search_box.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      let input = this.value;
+      if (input.length > 0) {
+        window.location.href = `/wiki/${input.replace(/\s+/g, '_')}`;
+      }
     }
   });
 
