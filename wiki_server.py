@@ -69,4 +69,4 @@ def static_files(filename):
 if __name__ == '__main__':
     if not os.path.exists(DATABASE_PATH):
         init_db()
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

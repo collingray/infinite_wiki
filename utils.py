@@ -1,8 +1,9 @@
 import os
 import subprocess
 import urllib
-from time import sleep
 
+import requests
+import yaml
 from openai import OpenAI
 
 SYSTEM_PROMPT = """
@@ -44,6 +45,8 @@ Your task is to generate new, fictitious articles in this format.
 
 The user will provide you with the title of the article, and you will respond with a YAML Wikipedia article, and nothing more.
 
+DO NOT use backticks (```) or dashes (---) around your answer.
+
 Make up facts as you go along, don't include boring information, and be VERY creative!
 
 Put lots of "<a>...</a>" tags around any notable people, places, ideas, books, movies, things, etc, that should have their own article.
@@ -52,6 +55,8 @@ The headings and card info used above are just examples, you should add new head
 """
 
 client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+
+image_endpoint = "http://localhost:5000/generate"
 
 
 def generate_yaml(filename: str) -> str:
@@ -68,17 +73,33 @@ def generate_yaml(filename: str) -> str:
     return completion.choices[0].message.content
 
 
+def generate_image(prompt: str) -> str:
+    url = f"{image_endpoint}?prompt={prompt}"
+    filename = f'static/images/{hash(prompt)}.jpg'
+
+    response = requests.get(url)
+
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+
+    return filename
+
+
 def generate_file(filename: str) -> str:
     yaml_filename = f'./data/yaml/{filename}.yaml'
     html_filename = f'./data/html/{filename}.html'
 
     if not os.path.exists(html_filename):
         if not os.path.exists(yaml_filename):
-            yaml = generate_yaml(filename)
+            yaml_text = generate_yaml(filename)
+            print(yaml_text)
+            yaml_obj = yaml.safe_load(yaml_text)
+            yaml_obj['card']['image'] = "/" + generate_image(yaml_obj['card']['caption'])
+            yaml_text = yaml.dump(yaml_obj, sort_keys=False)
 
             # save to disk
             with open(yaml_filename, 'w') as f:
-                f.write(yaml)
+                f.write(yaml_text)
 
         # generate html file
         subprocess.run(['node', 'generate_html.mjs', yaml_filename, html_filename])
