@@ -1,7 +1,7 @@
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
-    font-size: 14px;
+    font-size: 0.875rem;
     background-color: #f9f9f9;
     margin: 0;
 }
@@ -24,25 +24,24 @@ h1, h2, h4 {
 }
 
 h1 {
-    font-size: 28.8px;
+    font-size: 2em
 }
 
 h2 {
-    font-size: 21px;
+    font-size: 1.5em;
     padding-top: 0.5em;
     padding-bottom: 0.17em;
 }
 
 h3 {
     font-family: sans-serif;
-    font-size: 16.8px;
+    font-size: 1.2em;
     font-weight: bold;
     padding-top: 0.35em;
 }
 
 p {
     font-family: sans-serif;
-    font-size: 14px;
     line-height: 1.6;
     margin-top: 0.5em;
     color: #202122;
@@ -71,7 +70,7 @@ a:has(> img) {
     grid-template-columns: 16em minmax(0, 1fr);
     grid-template-areas: "sidebar main";
     max-width: 1596px;
-    min-width: 500px;
+    min-width: 320px;
     margin: 0 auto;
     background-color: #fff;
     padding: 1em 2.75em 2em;
@@ -108,7 +107,7 @@ a:has(> img) {
     font-weight: bold;
     text-align: center;
     padding: 0;
-    font-size: 120%;
+    font-size: 125%;
 }
 
 
@@ -234,7 +233,6 @@ a:hover {
     border: none;
     width: 80%;
     margin-left: 30px;
-    font-size: 16px;
 }
 
 .search-box:focus {
