@@ -1,0 +1,5 @@
+anthropic==0.25.7
+diffusers==0.27.2
+flask==3.0.3
+requests==2.31.0
+torch==2.1.2

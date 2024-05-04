@@ -6,7 +6,8 @@ import time
 from utils import generate_file
 
 app = Flask(__name__)
-DATABASE_PATH = 'file_database.db'
+
+DATABASE_PATH = os.environ.get('DATABASE_PATH', 'file_database.db')
 N_GENERATION_RETRIES = 3
 
 

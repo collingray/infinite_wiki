@@ -222,7 +222,7 @@ content:
 
 client = anthropic.Anthropic()
 
-image_endpoint = "http://localhost:5000/generate"
+image_endpoint = f"http://localhost:{os.environ.get('IMAGE_SERVER_PORT')}/generate"
 
 
 def generate_yaml(filename: str) -> str:
@@ -269,7 +269,7 @@ def generate_file(filename: str) -> str:
                 f.write(yaml_text)
 
         # generate html file
-        subprocess.run(['node', 'generate_html.mjs', yaml_filename, html_filename])
+        subprocess.run(['node', './node/generate_html.mjs', yaml_filename, html_filename])
 
     # read html file
     with open(html_filename, 'r') as f:

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
-import {index_template} from "./templates/index_template.mjs";
-import {add_links} from "./templates/utils.mjs";
+import {index_template} from "index_template.mjs";
+import {add_links} from "utils.mjs";
 
 function main() {
 
