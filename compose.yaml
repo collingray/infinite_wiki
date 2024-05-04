@@ -11,6 +11,8 @@ services:
       - ./data:/app/data
     ports:
       - ${WIKI_SERVER_PORT}:8000
+    networks:
+      - shared-network
 
   image_app:
     build:
@@ -31,6 +33,12 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [ gpu ]
+    networks:
+      - shared-network
 
 volumes:
   data:
+
+networks:
+  shared-network:
+    driver: bridge
