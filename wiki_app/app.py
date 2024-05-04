@@ -1,37 +1,15 @@
 from flask import Flask, request, jsonify, render_template_string, send_from_directory, redirect, url_for
-import sqlite3
 import os
 import time
 
 from utils import generate_file
+from file_db import FileDB
 
-DATABASE_PATH = os.environ.get('DATABASE_PATH', 'file_database.db')
 N_GENERATION_RETRIES = 3
 
 app = Flask(__name__)
 
-
-def get_db_connection():
-    conn = sqlite3.connect(DATABASE_PATH)
-    conn.row_factory = sqlite3.Row  # Access columns by names
-    return conn
-
-
-def init_db():
-    """Initialize the database and create the 'files' table if it doesn't exist."""
-    with get_db_connection() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS files (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                filename TEXT NOT NULL,
-                content TEXT NOT NULL
-            )
-        """)
-        conn.commit()
-
-
-if not os.path.exists(DATABASE_PATH):
-    init_db()
+db = FileDB(load_dir='data/html')
 
 
 @app.route('/')
@@ -39,9 +17,7 @@ if not os.path.exists(DATABASE_PATH):
 @app.route('/wiki')
 def serve_random_file():
     """Redirect to serve a random HTML file from the database via the specific file-serving route."""
-    conn = get_db_connection()
-    file = conn.execute("SELECT * FROM files ORDER BY RANDOM() LIMIT 1;").fetchone()
-    conn.close()
+    file = db.get_random_file()
     if file:
         filename = file['filename'].replace(' ', '_')
         return redirect(url_for('serve_file', filename=filename))
@@ -53,9 +29,7 @@ def serve_random_file():
 def serve_file(filename):
     """Serve an existing file or generate a missing file."""
     filename = filename.replace('_', ' ')
-    conn = get_db_connection()
-    file = conn.execute("SELECT * FROM files WHERE filename = ?", (filename,)).fetchone()
-    conn.close()
+    file = db.get_file(filename)
     if file:
         return render_template_string(file['content'])
     else:
@@ -71,10 +45,7 @@ def serve_file(filename):
 
                 retries += 1
 
-        conn = get_db_connection()
-        conn.execute("INSERT INTO files (filename, content) VALUES (?, ?)", (filename, content))
-        conn.commit()
-        conn.close()
+        db.add_file(filename, content)
         return render_template_string(content)
 
 
@@ -104,9 +75,7 @@ def static_files(filename):
 @app.route('/api/fetch_titles')
 def fetch_titles():
     """Fetch all titles from the database."""
-    conn = get_db_connection()
-    titles = conn.execute("SELECT filename FROM files;").fetchall()
-    conn.close()
+    titles = db.get_filenames()
     return jsonify([title['filename'] for title in titles])
 
 
