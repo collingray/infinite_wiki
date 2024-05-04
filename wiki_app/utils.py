@@ -271,6 +271,11 @@ def generate_file(filename: str) -> str:
         # generate html file
         subprocess.run(['node', './node/generate_html.mjs', yaml_filename, html_filename])
 
-    # read html file
-    with open(html_filename, 'r') as f:
-        return f.read()
+    try:
+        # read html file
+        with open(html_filename, 'r') as f:
+            return f.read()
+    except Exception as e:
+        os.remove(yaml_filename)
+
+        raise e
