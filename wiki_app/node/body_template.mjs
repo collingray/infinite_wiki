@@ -11,8 +11,9 @@ export function body_template(content, heading_level = 2) {
     if (key !== "summary") {
       // The title is the key with underscores replaced with spaces
       let title = key.replace(/_/g, " ");
+      let id = key.replace(/ /g, "_");
 
-      out += `<h${heading_level} id="${key}">${title}</h${heading_level}>`
+      out += `<h${heading_level} id="${id}">${title}</h${heading_level}>`
     }
 
     if (content[key].constructor === Object) {
