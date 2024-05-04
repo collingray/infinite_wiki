@@ -5,10 +5,10 @@ import time
 
 from utils import generate_file
 
-app = Flask(__name__)
-
 DATABASE_PATH = os.environ.get('DATABASE_PATH', 'file_database.db')
 N_GENERATION_RETRIES = 3
+
+app = Flask(__name__)
 
 
 def get_db_connection():
@@ -28,6 +28,10 @@ def init_db():
             )
         """)
         conn.commit()
+
+
+if not os.path.exists(DATABASE_PATH):
+    init_db()
 
 
 @app.route('/')
@@ -107,6 +111,4 @@ def fetch_titles():
 
 
 if __name__ == '__main__':
-    if not os.path.exists(DATABASE_PATH):
-        init_db()
     app.run(debug=True, port=5001)

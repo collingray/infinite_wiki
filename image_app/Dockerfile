@@ -1,8 +1,7 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.11
+FROM huggingface/transformers-pytorch-gpu:4.40.1
 
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+WORKDIR /app
 
-COPY ./uwsgi.ini /app/uwsgi.ini
+COPY . .
 
-COPY . /app
+RUN pip install --no-cache-dir -r requirements.txt

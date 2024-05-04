@@ -1,8 +1,11 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.11
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
 
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+# Set the working directory in the container
+WORKDIR /app
 
-COPY ./uwsgi.ini /app/uwsgi.ini
+# Copy the current directory contents into the container at /usr/src/app
+COPY . .
 
-COPY . /app
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
