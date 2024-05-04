@@ -2,17 +2,28 @@ services:
   wiki_app:
     build:
       context: ./wiki_app
-      dockerfile: ../Dockerfile
+      dockerfile: Dockerfile
+    env_file:
+      - .env
     volumes:
       - ./static:/app/static
       - ./data:/app/data
     ports:
       - "5001:80"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
 
   image_app:
     build:
       context: ./image_app
-      dockerfile: ../Dockerfile
+      dockerfile: Dockerfile
+    env_file:
+      - .env
     volumes:
       - ./static/assets:/app/static/assets
     ports:
