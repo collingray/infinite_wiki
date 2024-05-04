@@ -222,7 +222,7 @@ content:
 
 client = anthropic.Anthropic()
 
-image_endpoint = f"http://localhost:{os.environ.get('IMAGE_SERVER_PORT')}/generate"
+image_endpoint = f"http://image_app:{os.environ.get('IMAGE_SERVER_PORT')}/generate"
 
 
 def generate_yaml(filename: str) -> str:
