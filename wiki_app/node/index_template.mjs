@@ -11,7 +11,7 @@ export function index_template(data) {
     <title>${data.title}</title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/script.js" defer></script>
-    <link rel="icon" href="/static/assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/assets/favicon.png" type="image/png">
 </head>
 <body>
 <div class="container">
