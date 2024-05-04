@@ -31,7 +31,7 @@ export function infocard_template(card) {
     <tr>
       <td class="info-card-image" colspan="2">
         <div class="loading-background">
-          <img src="${card.image}" alt="${card.caption}" width="220px" height="294px"/>
+          <img src="${card.image}" alt="${card.caption.replace('"', '&quot;')}" width="220px" height="294px"/>
         </div>
         <label>${card.caption}</label>
       </td>
