@@ -6,6 +6,7 @@ import requests
 import yaml
 
 import anthropic
+from groq import Groq
 
 SYSTEM_PROMPT = """
 Your task is to generate new, fictitious Wikipedia articles in a YAML format.
@@ -220,22 +221,38 @@ content:
 """},
 ]
 
-client = anthropic.Anthropic()
 
 image_endpoint = f"http://image_app:{os.environ.get('IMAGE_SERVER_PORT')}/generate"
 
 
-def generate_yaml(filename: str) -> str:
-    page_title = urllib.parse.unquote(filename).replace('_', ' ')
+if os.environ.get('PROVIDER') == 'claude':
+    claude_client = anthropic.Anthropic()
 
-    message = client.messages.create(
-        model="claude-3-haiku-20240307",
-        messages=EXAMPLE_DIALOG + [{"role": "user", "content": page_title}],
-        max_tokens=2048,
-        system=SYSTEM_PROMPT,
-    )
+    def generate_yaml(filename: str) -> str:
+        page_title = urllib.parse.unquote(filename).replace('_', ' ')
 
-    return message.content[0].text
+        message = claude_client.messages.create(
+            model=os.environ.get('CLAUDE_MODEL'),
+            messages=EXAMPLE_DIALOG + [{"role": "user", "content": page_title}],
+            max_tokens=2048,
+            system=SYSTEM_PROMPT,
+        )
+
+        return message.content[0].text
+elif os.environ.get('PROVIDER') == 'groq':
+    groq_client = Groq()
+
+    def generate_yaml(filename: str) -> str:
+        page_title = urllib.parse.unquote(filename).replace('_', ' ')
+
+        message = groq_client.chat.completions.create(
+            model=os.environ.get('GROQ_MODEL'),
+            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + EXAMPLE_DIALOG + [
+                {"role": "user", "content": page_title}],
+            max_tokens=2048,
+        )
+
+        return message.choices[0].message.content
 
 
 def generate_image(prompt: str) -> str:
