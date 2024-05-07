@@ -225,7 +225,7 @@ content:
 image_endpoint = f"http://image_app:{os.environ.get('IMAGE_SERVER_PORT')}/generate"
 
 
-if os.environ.get('PROVIDER') == 'claude':
+if os.environ.get('TEXT_PROVIDER') == 'claude':
     claude_client = anthropic.Anthropic()
 
     def generate_yaml(filename: str) -> str:
@@ -239,7 +239,7 @@ if os.environ.get('PROVIDER') == 'claude':
         )
 
         return message.content[0].text
-elif os.environ.get('PROVIDER') == 'groq':
+elif os.environ.get('TEXT_PROVIDER') == 'groq':
     groq_client = Groq()
 
     def generate_yaml(filename: str) -> str:
@@ -253,6 +253,8 @@ elif os.environ.get('PROVIDER') == 'groq':
         )
 
         return message.choices[0].message.content
+else:
+    raise ValueError("Invalid TEXT_PROVIDER environment variable: \"{os.environ.get('TEXT_PROVIDER')}\". Must be one of 'claude' or 'groq'")
 
 
 def generate_image(prompt: str) -> str:
