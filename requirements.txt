@@ -1,5 +1,6 @@
 anthropic
 diffusers
-flask
-requests
+Flask
+groq
+Requests
 torch

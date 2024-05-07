@@ -55,6 +55,9 @@ elif os.environ.get('IMAGE_PROVIDER') == 'stability':
         else:
             raise Exception(str(response.json()))
 
+else:
+    raise ValueError(f"Invalid IMAGE_PROVIDER '{os.environ.get('IMAGE_PROVIDER')}': must be 'local' or 'stability'")
+
 
 @app.route('/generate')
 def generate():

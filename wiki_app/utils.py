@@ -222,17 +222,18 @@ content:
 ]
 
 
-image_endpoint = f"http://image_app:{os.environ.get('IMAGE_SERVER_PORT')}/generate"
+image_endpoint = f"http://image_app:8000/generate"
 
 
-if os.environ.get('TEXT_PROVIDER') == 'claude':
-    claude_client = anthropic.Anthropic()
+if os.environ.get('TEXT_PROVIDER') == 'anthropic':
+    anthropic_client = anthropic.Anthropic()
+    anthropic_model = os.environ.get('ANTHROPIC_MODEL')
 
     def generate_yaml(filename: str) -> str:
         page_title = urllib.parse.unquote(filename).replace('_', ' ')
 
-        message = claude_client.messages.create(
-            model=os.environ.get('CLAUDE_MODEL'),
+        message = anthropic_client.messages.create(
+            model=anthropic_model,
             messages=EXAMPLE_DIALOG + [{"role": "user", "content": page_title}],
             max_tokens=2048,
             system=SYSTEM_PROMPT,
@@ -241,12 +242,13 @@ if os.environ.get('TEXT_PROVIDER') == 'claude':
         return message.content[0].text
 elif os.environ.get('TEXT_PROVIDER') == 'groq':
     groq_client = Groq()
+    groq_model = os.environ.get('GROQ_MODEL')
 
     def generate_yaml(filename: str) -> str:
         page_title = urllib.parse.unquote(filename).replace('_', ' ')
 
         message = groq_client.chat.completions.create(
-            model=os.environ.get('GROQ_MODEL'),
+            model=groq_model,
             messages=[{"role": "system", "content": SYSTEM_PROMPT}] + EXAMPLE_DIALOG + [
                 {"role": "user", "content": page_title}],
             max_tokens=2048,
@@ -254,7 +256,7 @@ elif os.environ.get('TEXT_PROVIDER') == 'groq':
 
         return message.choices[0].message.content
 else:
-    raise ValueError("Invalid TEXT_PROVIDER environment variable: \"{os.environ.get('TEXT_PROVIDER')}\". Must be one of 'claude' or 'groq'")
+    raise ValueError(f"Invalid TEXT_PROVIDER '{os.environ.get('TEXT_PROVIDER')}': must be 'anthropic' or 'groq'")
 
 
 def generate_image(prompt: str) -> str:
